@@ -24,8 +24,9 @@ st.set_page_config(
 # Static CSS only. Uploaded text is always rendered through plain text widgets.
 st.markdown(
     """<style>
+    :root {color-scheme:light;}
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stAppViewContainer"] > .main {background:#f4f7f8;color:#17313f;}
     .block-container {max-width:1320px;padding-top:4.25rem;padding-bottom:3rem;}
-    [data-testid="stAppViewContainer"] {background:#f8faf9;}
     [data-testid="stSidebar"] {background:#1b2e3a; border-right:1px solid #304955;}
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {color:#edf5f3;}
     [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {color:#adbfca;}
@@ -45,7 +46,9 @@ st.markdown(
     [data-testid="stVerticalBlockBorderWrapper"] {border-radius:14px;}
     [data-testid="stForm"] {background:#fff; border:1px solid #dfe8e6; border-radius:16px;}
     [data-testid="stChatMessage"] {background:#fff; border:1px solid #e0e9e7; border-radius:14px;}
-    h1,h2,h3 {color:#12313e; letter-spacing:-.035em;}
+    h1,h2,h3,h4,h5,h6 {color:#102f40!important; letter-spacing:-.035em;}
+    [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {color:#294957;}
+    [data-testid="stCaptionContainer"] {color:#536d79!important;}
     h1 {font-size:clamp(1.7rem,3.3vw,2.65rem);line-height:1.16;}
     h2 {font-size:1.65rem;}
     h3 {font-size:1.15rem;}
