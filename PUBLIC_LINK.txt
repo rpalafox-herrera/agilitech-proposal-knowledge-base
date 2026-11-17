@@ -1,0 +1,6 @@
+No permanent public URL has been created yet.
+
+For the free hosted demo, follow DEPLOYMENT.md and deploy the GitHub repository
+through Streamlit Community Cloud. The resulting https://<your-app>.streamlit.app
+address is the shareable link. Start Public Demo.cmd creates only a temporary
+tunnel from the presentation laptop.

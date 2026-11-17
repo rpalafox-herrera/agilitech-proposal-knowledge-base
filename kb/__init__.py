@@ -1,0 +1,1 @@
+"""Local proposal archive backend."""
