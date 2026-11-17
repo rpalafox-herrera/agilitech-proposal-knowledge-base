@@ -1,4 +1,4 @@
-"""Application operations; parameterized SQL, immutable originals and local storage."""
+"""Application operations; parameterized SQL, immutable originals and optional Firebase Storage."""
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import hashlib
@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import sqlite3
+import json
 from uuid import uuid4
 
 from .errors import KBError, DuplicateDocument
@@ -60,6 +61,9 @@ class KnowledgeBase:
         self.data_dir = Path(data_dir or os.environ.get("AGILITECH_DATA_DIR") or PROJECT_ROOT / "data").resolve()
         self.uploads = self.data_dir / "uploads"
         self.db_path = self.data_dir / "knowledge_base.db"
+        self.firebase_bucket = None
+        self._firebase = False
+        self._configure_firebase()
         try:
             self.uploads.mkdir(parents=True, exist_ok=True)
             with self.connect() as db:
@@ -67,6 +71,22 @@ class KnowledgeBase:
                 db.executescript(Path(__file__).with_name("schema.sql").read_text(encoding="utf-8"))
         except (OSError, sqlite3.Error) as exc:
             raise KBError("Cannot initialize local storage. Check write permissions and that Python's SQLite supports FTS5.") from exc
+
+    def _configure_firebase(self):
+        raw = os.environ.get("FIREBASE_SERVICE_ACCOUNT_JSON", "").strip()
+        if not raw:
+            return
+        try:
+            import firebase_admin
+            from firebase_admin import credentials, storage
+            if not firebase_admin._apps:
+                info = json.loads(raw)
+                options = {"storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET") or f"{info['project_id']}.firebasestorage.app"}
+                firebase_admin.initialize_app(credentials.Certificate(info), options)
+            self.firebase_bucket = storage.bucket()
+            self._firebase = True
+        except Exception as exc:
+            raise KBError("Firebase Storage could not be initialized. Check the Render Firebase credential and bucket name.") from exc
 
     @contextmanager
     def connect(self):
@@ -95,16 +115,20 @@ class KnowledgeBase:
             raise DuplicateDocument(duplicate["id"])
         extracted = extract(filename, data)
         location = "uploads/" + uuid4().hex + Path(filename).suffix.lower()
-        target = self._file(location)
+        target = self._file(location) if not self._firebase else None
         try:
+            if self._firebase:
+                blob = self.firebase_bucket.blob(location)
+                blob.upload_from_string(data, content_type=None)
             with self.connect() as db:
                 # Serialize database/file mutation and recheck duplicates after extraction.
                 db.execute("BEGIN IMMEDIATE")
                 duplicate = db.execute("SELECT id FROM documents WHERE sha256=?", (digest,)).fetchone()
                 if duplicate:
                     raise DuplicateDocument(duplicate["id"])
-                with target.open("xb") as output:
-                    output.write(data)
+                if target is not None:
+                    with target.open("xb") as output:
+                        output.write(data)
                 columns = list(values) + ["original_filename", "uploaded_at", "file_location", "file_size", "sha256", "extracted_text", "extraction_warning"]
                 args = list(values.values()) + [filename, datetime.now(timezone.utc).isoformat(timespec="seconds"), location, len(data), digest, extracted.text, extracted.warning]
                 cursor = db.execute(f"INSERT INTO documents ({','.join(columns)}) VALUES ({','.join('?' for _ in columns)})", args)
@@ -113,7 +137,13 @@ class KnowledgeBase:
                                [(document_id, i, s["location"], s["text"]) for i, s in enumerate(extracted.segments)])
             return document_id
         except Exception as exc:
-            target.unlink(missing_ok=True)
+            if target is not None:
+                target.unlink(missing_ok=True)
+            if self._firebase:
+                try:
+                    self.firebase_bucket.blob(location).delete()
+                except Exception:
+                    pass
             if isinstance(exc, KBError):
                 raise
             raise KBError("Upload could not be saved. Check available disk space and folder permissions.") from exc
@@ -132,6 +162,8 @@ class KnowledgeBase:
         if not doc:
             raise KBError("Document no longer exists.")
         try:
+            if self._firebase:
+                return self.firebase_bucket.blob(doc["file_location"]).download_as_bytes()
             return self._file(doc["file_location"]).read_bytes()
         except OSError as exc:
             raise KBError("The original file is missing or unreadable. Restore it from a local backup.") from exc
@@ -154,10 +186,11 @@ class KnowledgeBase:
                 doc = db.execute("SELECT file_location FROM documents WHERE id=?", (document_id,)).fetchone()
                 if not doc:
                     raise KBError("Document no longer exists.")
-                target = self._file(doc["file_location"])
-                if target.exists():
-                    staged = target.with_suffix(target.suffix + ".deleting")
-                    target.rename(staged)
+                if not self._firebase:
+                    target = self._file(doc["file_location"])
+                    if target.exists():
+                        staged = target.with_suffix(target.suffix + ".deleting")
+                        target.rename(staged)
                 db.execute("DELETE FROM documents WHERE id=?", (document_id,))
         except Exception as exc:
             if staged and staged.exists():
@@ -171,6 +204,11 @@ class KnowledgeBase:
             except OSError as exc:
                 raise KBError("The record was deleted, but its staged original could not be removed. "
                               f"Close other programs and remove {staged.name} from the uploads folder.") from exc
+        if self._firebase:
+            try:
+                self.firebase_bucket.blob(doc["file_location"]).delete()
+            except Exception as exc:
+                raise KBError("The record was deleted, but its Firebase original could not be removed.") from exc
 
     def _filters(self, filters):
         clauses, args = [], []
