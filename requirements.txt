@@ -3,3 +3,4 @@ streamlit-pdf==2.1.0
 pypdf==7.0.0
 python-docx==1.2.0
 firebase-admin==6.9.0
+supabase==2.20.0
