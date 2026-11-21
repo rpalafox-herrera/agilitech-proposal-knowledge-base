@@ -166,3 +166,17 @@ The tests exercise real extraction and FTS5 with temporary databases, not paid A
 - **Original file missing:** restore the matching uploads and database from a backup; metadata alone cannot recreate an original.
 
 The archive and source locations provide a useful foundation for future assisted drafting. Production use should separately address confidentiality, access controls, answer quality and citations back to these stored originals.
+
+## Render startup and storage update
+
+If Render reports an `IndentationError` at line 2 of `kb/service.py`, deploy the
+complete repaired module rather than pasting indented fragments into the file.
+See [Render setup, persistence, and backup instructions](DEPLOYMENT.md#render-repair-startup-and-preserve-the-library).
+
+The sidebar now shows the original-file backend separately from SQLite records
+and offers a downloadable backup of both records and originals. Local restart
+persistence is different from container lifetime: Render's default filesystem
+is temporary. Putting originals in Supabase or Firebase alone does not preserve
+the SQLite database. Keep an independent downloaded backup and use an attached
+persistent disk or a separately designed persistent metadata database before
+relying on a hosted service for long-term storage.

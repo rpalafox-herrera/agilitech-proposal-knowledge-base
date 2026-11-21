@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Wastewater Pump Station Controls Renewal
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2016
+Industry: Water/Wastewater
+Project type: Controls modernization
+Engineering discipline: Controls and Automation
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Propose fictional SCADA visibility, level instrumentation and alarm rationalization for a wastewater pump station with four assumed pumps. Provide planned loop checks and startup support as classroom examples.
+
+Hypothetical deliverables
+Prepare an alarm register, instrument list, control panel drawings and a hypothetical site acceptance test script.
+
+Invented planning figures
+Illustrative proposed budget: USD 560,000
+Illustrative planned duration: 20 weeks
+Illustrative engineering labor estimate: 1,800 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Pump capacities and operating conditions are unknown. The assumed pump count and all planning figures are synthetic, with no reliability claim.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

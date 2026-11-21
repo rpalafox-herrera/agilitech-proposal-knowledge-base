@@ -27,3 +27,36 @@ For a fresh normal setup, the README's standard `python -m pytest -q` command is
 Pytest empties its chosen basetemp directory: use it **only** for disposable test files. It must never point to `data`, `samples`, or another folder containing documents.
 
 The tests exercise the actual SQLite and file service for uploads of all three formats. AppTest verifies screen interactions but cannot inject a file into its upload widget. No production archive or confidential documents were tested. OCR and production access controls are outside this prototype.
+
+## Render startup repair revalidation — November 20, 2026
+
+The connected repository at `5d2b8a2` contained an incomplete `kb/service.py`
+that failed at import with `IndentationError`. The service module was rebuilt
+from the complete sibling implementation, with the intended optional Supabase
+and Firebase original-file operations preserved.
+
+- Installed the repository's exact runtime/dev requirements; `pip check` passed.
+- Python compilation passed; **40 automated tests passed**.
+- Tests cover all three document formats, exact duplicates, indexing, BM25,
+  phrases, cross-page terms, all metadata filters, unknown values, editing,
+  original retrieval, confirmed deletion, rollback, malformed/oversized files,
+  path containment, backup integrity and restore, Streamlit navigation, and
+  deterministic assistant/project-idea retrieval.
+- Supabase/Firebase lifecycle tests use fakes. No real cloud account credentials,
+  bucket permissions, or production persistence were verified.
+- Started the actual Streamlit application locally on port 8501. Chromium
+  verified a synthetic upload, content search, source display, unchanged original
+  download, and complete backup ZIP download.
+- Stopped and restarted the actual server. All 35 records at that point,
+  metadata and original-file hashes were identical, including the new upload.
+- Restored the browser-downloaded backup to an independent data directory;
+  all 35 records and originals restored and content remained searchable.
+- Browser metadata editing and confirmed deletion then removed only the extra
+  synthetic test record, leaving the 34 bundled fictional archive examples.
+
+This proves persistence across a local process restart with an unchanged disk.
+It does not prove that Render's ephemeral filesystem persists. No Render service,
+persistent disk, billing setting, live environment variable, or production
+bucket was changed. Hosted deployment still requires the repaired code and
+verification of the actual Render URL. AI model generation was not tested;
+local search-only assistant retrieval was tested.

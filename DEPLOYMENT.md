@@ -97,3 +97,70 @@ and local upload folder are still container-local; for durable shared uploads,
 the next production step is moving originals to Firebase Storage and metadata
 to Firestore, then replacing local FTS5 search with a cloud search/index.
 
+
+## Render: repair startup and preserve the library
+
+`kb/service.py` must contain the complete Python module. An `IndentationError`
+on `self._firebase = False` at line 2 means the file was replaced by incomplete
+class fragments. Do not fix this by unindenting that one line; deploy the full
+repaired module. Verify it before deployment:
+
+```bash
+python -m compileall -q app.py kb
+python -m pytest -q
+```
+
+For a native Render Python web service:
+
+- Build command: `pip install -r requirements.txt`
+- Start command: `python -m streamlit run app.py --server.address=0.0.0.0 --server.port=$PORT --server.headless=true`
+- Keep existing public/synthetic document restrictions. This app has no employee login.
+
+### Will uploads stay saved?
+
+| Where it runs | What survives? |
+| --- | --- |
+| Your own computer, unchanged data folder | App/browser restarts preserve the database and original files. |
+| Render default filesystem, including a free service | Runtime files can be lost on restart, redeploy, and free-service spin-down. |
+| Render with an attached persistent disk | Data written under that mount survives normal service restarts/redeploys while the disk is retained. Deleting the service/disk is a separate risk; keep independent backups. |
+| Firebase/Supabase originals + local SQLite | Cloud originals can persist, but searchable records and metadata still disappear if local SQLite is lost. This is not full database persistence. |
+
+To retain the existing SQLite/FTS5 design on Render, attach a persistent disk
+in Render's dashboard (a paid service feature). For example, mount it at
+`/var/data` and set `AGILITECH_DATA_DIR=/var/data/agilitech`. **Setting the
+variable alone does not provision a persistent disk.** We have not changed
+billing, provisioned a disk, or verified your dashboard configuration.
+
+A free option that preserves the current technology is to run locally and
+keep downloaded backups. Do not rely on an ephemeral hosted demo as the only
+copy of proposals.
+
+Official references: https://render.com/docs/disks and https://render.com/docs/free
+
+### Back up and restore
+
+In the sidebar, open **Storage and backups**, click **Prepare downloadable
+backup**, then **Download backup ZIP**. Save the ZIP on your own computer.
+It includes a consistent SQLite snapshot, metadata, indexes, extracted text,
+and checksum-verified originals, including configured remote originals. The
+browser snapshot is limited to 200 MB. Create a fresh backup after edits.
+A ZIP retained only in this chat workspace/server is not an independent copy.
+
+To restore a trusted downloaded backup on your own computer, stop the app and
+restore into a NEW folder:
+
+```bash
+python restore_backup.py /path/to/agilitech-backup.zip --destination /path/to/restored-data
+```
+
+Set `AGILITECH_DATA_DIR` to that new folder before restarting the app. The
+restore refuses to overwrite a nonempty library, validates ZIP paths and
+checksums, and checks SQLite/FTS integrity. Originals restore locally; unset
+`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and
+`FIREBASE_SERVICE_ACCOUNT_JSON` for the restored local copy. Never switch
+an existing library's file backend without migrating its originals.
+
+Supabase/Firebase integration in this version stores original files only.
+Cloud storage paths and credentials do not replace a persistent SQLite disk.
+Remote API lifecycle tests use fakes; production bucket credentials and
+permissions must be verified separately with synthetic documents.
