@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Food Processing Utility Piping Layout
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2020
+Industry: Food & Beverage
+Project type: Facility upgrade
+Engineering discipline: Mechanical
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Create a fictional utility piping arrangement for a food processing expansion. The example includes 180 meters of assumed pipe routing, equipment access review, a laser scanning allowance and 3D coordination.
+
+Hypothetical deliverables
+Prepare a conceptual piping model, equipment arrangement, preliminary materials list and installation sequencing notes.
+
+Invented planning figures
+Illustrative proposed budget: USD 930,000
+Illustrative planned duration: 22 weeks
+Illustrative engineering labor estimate: 2,400 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Routing length, equipment positions and utility demands are invented. Detailed sanitary design and pressure calculations are outside this demo.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Filtration Skid Electrical Coordination 2009 Study A
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2009
+Industry: Water/Wastewater
+Project type: Electrical construction
+Engineering discipline: Electrical
+Client name: Unknown / not supplied
+
+Hypothetical scope
+For fictional study package A in 2009, plan electrical service routing and motor control connections for hypothetical filtration skids. The classroom scenario assumes 13 equipment or interface review items. That count is invented and does not describe an actual facility.
+
+Hypothetical deliverables
+Prepare a single-line concept, cable schedule and installation sequence. Compare the base arrangement with an alternative for the 13 assumed review items, documenting unresolved site questions.
+
+Invented planning figures
+Illustrative proposed budget: USD 277,500
+Illustrative planned duration: 26 weeks
+Illustrative engineering labor estimate: 985 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+All project identities, quantities, budgets, dates, schedules and labor estimates are fictional classroom assumptions. Client identity, site conditions, actual equipment ratings, utility data, regulatory requirements and acceptance criteria are unknown. No performance, savings, compliance or completion claim is made.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

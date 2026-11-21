@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Warehouse Rooftop Solar Installation
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2018
+Industry: Renewable Energy
+Project type: Solar installation
+Engineering discipline: Electrical
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Outline a fictional solar installation for a warehouse roof with an assumed 600 kW DC array. Include conceptual electrical design, structural review coordination, utility coordination and commissioning planning.
+
+Hypothetical deliverables
+Prepare a conceptual array layout, single-line diagram, permitting document list and illustrative construction schedule.
+
+Invented planning figures
+Illustrative proposed budget: USD 1,380,000
+Illustrative planned duration: 24 weeks
+Illustrative engineering labor estimate: 2,100 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Array capacity is invented. Roof suitability, tariffs and interconnection conditions are unknown. No generation, payback or savings is promised.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.
