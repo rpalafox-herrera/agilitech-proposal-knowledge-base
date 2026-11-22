@@ -164,3 +164,18 @@ Supabase/Firebase integration in this version stores original files only.
 Cloud storage paths and credentials do not replace a persistent SQLite disk.
 Remote API lifecycle tests use fakes; production bucket credentials and
 permissions must be verified separately with synthetic documents.
+
+### Supabase startup dependency error
+
+The `supabase==2.20.0` distribution leaves its companion SDK versions unbounded.
+Installing newer companions can fail at import with
+`ModuleNotFoundError: No module named 'supabase_auth.http_clients'`, before
+credentials or the bucket are used. Keep the six Supabase SDK family pins in
+`requirements.txt` together. Reinstall requirements and redeploy after updating
+the repository; changing a secret does not repair this import error.
+
+The repository now tests real SDK/client initialization offline, in addition
+to mocked cloud-file operations. A successful initialization still does not
+validate actual credentials, bucket existence, or upload permissions. Check
+those with a synthetic upload after the application opens. Never paste keys
+into chat, source code, or GitHub.
