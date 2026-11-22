@@ -60,3 +60,17 @@ persistent disk, billing setting, live environment variable, or production
 bucket was changed. Hosted deployment still requires the repaired code and
 verification of the actual Render URL. AI model generation was not tested;
 local search-only assistant retrieval was tested.
+
+## Supabase dependency follow-up
+
+The live Render app returned HTTP 200 for Streamlit but displayed the Supabase
+initialization error instead of its dashboard. The same installed requirements
+failed locally while importing the real SDK: `supabase==2.20.0` had resolved
+`supabase-auth==2.34.1`, which lacks `supabase_auth.http_clients`.
+
+Pinned all six SDK-family packages to 2.20.0. All **43 tests passed**, including
+real SDK import, storage/PostgREST/functions client construction with fictional
+credentials and socket connections blocked, plus a regression test separating
+import failures from credential/configuration errors. `pip check` passed.
+The SDK emitted deprecation warnings but no test failures. Actual Render
+secret values, bucket permissions, and production uploads are not verified.

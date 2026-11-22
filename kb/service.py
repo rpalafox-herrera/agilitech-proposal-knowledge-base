@@ -86,6 +86,9 @@ class KnowledgeBase:
             raise KBError("Choose one original-file backend: Supabase or Firebase, not both.")
         try:
             from supabase import create_client
+        except ImportError as exc:
+            raise KBError("Supabase dependencies are missing or incompatible. Reinstall the pinned requirements and redeploy; changing the secret key will not fix this dependency error.") from exc
+        try:
             self.supabase = create_client(url, key)
         except Exception as exc:
             raise KBError("Supabase Storage could not be initialized. Check its URL and secret key.") from exc
