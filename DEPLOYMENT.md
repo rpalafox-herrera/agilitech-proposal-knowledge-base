@@ -179,3 +179,20 @@ to mocked cloud-file operations. A successful initialization still does not
 validate actual credentials, bucket existence, or upload permissions. Check
 those with a synthetic upload after the application opens. Never paste keys
 into chat, source code, or GitHub.
+
+### Diagnose an upload failure without sharing credentials
+
+After startup, open **Storage and backups → Check storage connection**. This
+reads only the configured bucket's metadata. It does not list or download
+proposal files. A successful check confirms metadata access, not upload rights.
+
+Upload errors now distinguish Supabase authentication (401/JWT), access denial
+(403/RLS), missing buckets, size/type restrictions, connectivity, and SQLite
+record/index failures. Messages are curated; raw response text, URLs, and keys
+are not shown. Keep both buckets until you know which contains needed files;
+spaces versus hyphens alone do not prove a bucket is wrong.
+
+The app sends `application/pdf`, the DOCX MIME type, or `text/plain` for its
+supported formats instead of labeling every original as octet-stream. If your
+bucket restricts file types, allow the formats the application needs. Do not
+make a private bucket public to work around a server-key problem.

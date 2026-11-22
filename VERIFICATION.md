@@ -74,3 +74,18 @@ credentials and socket connections blocked, plus a regression test separating
 import failures from credential/configuration errors. `pip check` passed.
 The SDK emitted deprecation warnings but no test failures. Actual Render
 secret values, bucket permissions, and production uploads are not verified.
+
+## Live upload diagnostics follow-up
+
+After the user changed the configured bucket, another fictional browser upload
+still reported zero records added. Browser-to-Render transfer succeeded (204),
+but the app returned a generic disk-space message that concealed the real
+failure. No successful upload, original download, or hosted durability was
+established by that check.
+
+Added curated Supabase error categories, a read-only bucket connection check,
+separate SQLite errors, and correct per-format MIME metadata. **57 tests pass**,
+including real Storage SDK request serialization with an offline HTTP transport,
+secret-redaction checks, permission/bucket/type/size classifications, rejection
+cleanup behavior, and SQLite failure classification. These offline tests do not
+establish real bucket credentials or hosted persistence.
