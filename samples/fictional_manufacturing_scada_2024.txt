@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Manufacturing SCADA and Alarm Refresh
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2024
+Industry: Manufacturing
+Project type: Automation upgrade
+Engineering discipline: Controls and Automation
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Describe a fictional SCADA refresh for an industrial mixing line. Include operator screen redesign, alarm documentation and a training plan for eight hypothetical operator stations.
+
+Hypothetical deliverables
+Prepare screen prototypes, a tag register, an alarm review workbook and a factory acceptance test checklist.
+
+Invented planning figures
+Illustrative proposed budget: USD 610,000
+Illustrative planned duration: 18 weeks
+Illustrative engineering labor estimate: 1,750 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Station count and effort are invented. Existing controls platforms, cybersecurity requirements and measured downtime are unknown.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Packaging Plant Electrical Upgrade
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2010
+Industry: Manufacturing
+Project type: Electrical construction
+Engineering discipline: Electrical
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Plan fictional industrial electrical construction for a packaging area, including switchgear coordination, cable routing, grounding and motor control center connections for 12 assumed motors.
+
+Hypothetical deliverables
+Develop a single-line diagram, cable schedule, installation work packages, and a proposed commissioning checklist.
+
+Invented planning figures
+Illustrative proposed budget: USD 740,000
+Illustrative planned duration: 18 weeks
+Illustrative engineering labor estimate: 1,600 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Motor loads and quantities are invented. Existing drawings, utility data and shutdown windows would require verification before real design work.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

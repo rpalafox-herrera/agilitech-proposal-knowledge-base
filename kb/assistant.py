@@ -291,7 +291,13 @@ class Assistant:
                 result["answer"] = f"This {'industry workspace' if industry else 'local library'} currently contains {count:,} document(s). " + result["answer"]
             return result
         if re.search(r"\b(privacy|private|confidential|backup|back up|stored|storage|external services?|api keys?|paid services?)\b", question, re.I):
-            result["answer"] = "This prototype stores originals, extracted text and metadata in its local data folder. It uses no paid service or API key. The optional AI connection is a local Ollama model, not an external document service. Use public or fictional documents here; the prototype has no accounts or encryption. Stop the app and back up the entire data folder to keep originals and database together."
+            storage = getattr(self.kb, "original_storage", "Local")
+            result["answer"] = (
+                f"Original files use {storage} storage. Metadata, extracted text and search indexes still use SQLite in the app's data folder. "
+                "They survive app restarts only if that folder survives. Render's default filesystem is temporary; a persistent disk or a separate durable database is required for hosted persistence. "
+                "Cloud storage for originals alone does not preserve searchable records. Use Storage and backups in the sidebar to download a complete snapshot to your own computer. "
+                "Use public or fictional documents only; this prototype has no employee access controls. The optional AI model runs locally."
+            )
             return result
         if re.search(r"\b(website|app|assistant)\b", question, re.I) and re.search(r"\b(help|do|purpose|use|work|navigate|capabilit)\w*\b", question, re.I):
             result["answer"] = "This website helps you upload and organize past proposals, search their extracted contents, and download originals as references for new projects. I can explain the navigation and retrieve source passages. A connected local AI model can summarize those passages; I cannot answer unrelated questions or confirm facts that are missing from your library."

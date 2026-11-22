@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Commercial Fleet Charging Concept
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2026
+Industry: Commercial
+Project type: EV charging infrastructure
+Engineering discipline: Electrical
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Develop a fictional EV charging concept for a commercial fleet yard with 16 assumed Level 2 charging ports. Include demand management, utility service coordination and preliminary equipment placement.
+
+Hypothetical deliverables
+Prepare a conceptual site plan, load assumptions register, single-line diagram and an illustrative procurement sequence.
+
+Invented planning figures
+Illustrative proposed budget: USD 875,000
+Illustrative planned duration: 20 weeks
+Illustrative engineering labor estimate: 1,950 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Port quantity is invented. Vehicle duty cycles and service capacity are unknown; no charging time, energy saving or project approval is claimed.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

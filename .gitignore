@@ -10,3 +10,7 @@ data/
 uploads/
 .env
 .streamlit/secrets.toml
+
+.venv
+backups/
+test-results/

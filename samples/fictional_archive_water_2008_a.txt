@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Pump Station Instrumentation Package 2008 Study A
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2008
+Industry: Water/Wastewater
+Project type: Controls modernization
+Engineering discipline: Controls and Automation
+Client name: Unknown / not supplied
+
+Hypothetical scope
+For fictional study package A in 2008, outline level instrumentation, pump permissives and SCADA alarm visibility for an assumed pump station. The classroom scenario assumes 21 equipment or interface review items. That count is invented and does not describe an actual facility.
+
+Hypothetical deliverables
+Prepare an instrument list, control narrative and illustrative loop-check plan. Compare the base arrangement with an alternative for the 21 assumed review items, documenting unresolved site questions.
+
+Invented planning figures
+Illustrative proposed budget: USD 190,000
+Illustrative planned duration: 19 weeks
+Illustrative engineering labor estimate: 660 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+All project identities, quantities, budgets, dates, schedules and labor estimates are fictional classroom assumptions. Client identity, site conditions, actual equipment ratings, utility data, regulatory requirements and acceptance criteria are unknown. No performance, savings, compliance or completion claim is made.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

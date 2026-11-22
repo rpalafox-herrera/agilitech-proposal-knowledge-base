@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Beverage Cleaning Controls Modernization
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2012
+Industry: Food & Beverage
+Project type: Automation upgrade
+Engineering discipline: Controls and Automation
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Describe a fictional clean-in-place (CIP) controls upgrade for three assumed tanks and a valve cluster. Include operator interface screens, sequence documentation and PLC programming in the demonstration scope.
+
+Hypothetical deliverables
+Produce a control narrative, input/output list, operator screen mockups, and a hypothetical factory acceptance test plan.
+
+Invented planning figures
+Illustrative proposed budget: USD 420,000
+Illustrative planned duration: 16 weeks
+Illustrative engineering labor estimate: 1,250 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Cleaning recipes, hygienic criteria and acceptance limits are unknown. The demo does not claim food safety validation or production improvement.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

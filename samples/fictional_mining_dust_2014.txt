@@ -1,0 +1,26 @@
+FICTIONAL UNIVERSITY DEMO - Mineral Handling Dust Collection Study
+
+FICTIONAL UNIVERSITY DEMO. This document is synthetic training data for a student project. It is not an Agilitech proposal, completed project, quotation, engineering design, or performance claim. All project details and numbers are invented. No client is identified.
+
+Fictional proposal year: 2014
+Industry: Mining
+Project type: Engineering study
+Engineering discipline: Mechanical
+Client name: Unknown / not supplied
+
+Hypothetical scope
+Assess hypothetical dust collection around two fictional conveyor transfer points. Compare duct layouts and model airflow for an invented downstream mineral processing area.
+
+Hypothetical deliverables
+Prepare a conceptual collection layout, fan selection comparison and maintenance access review for the fictional facility.
+
+Invented planning figures
+Illustrative proposed budget: USD 265,000
+Illustrative planned duration: 14 weeks
+Illustrative engineering labor estimate: 1,100 hours
+These figures are fabricated proposal assumptions, not actual costs, savings, results, commitments, or validated estimates.
+
+Hypothetical assumptions and exclusions
+Dust properties, measured emissions and site constraints are unknown. No compliance status or emission reduction percentage is asserted.
+
+Public website industry and service categories inspired this exercise only. Real historical proposals and confidential information were not used.

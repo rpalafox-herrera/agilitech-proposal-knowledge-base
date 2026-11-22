@@ -81,6 +81,10 @@ st.markdown(
     .demo-label {color:#a27324;font-size:.7rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase;}
     .demo-number {font-size:1.45rem;line-height:1.4;color:#193f49;font-weight:750;}
     .footer-note {color:#78908c;font-size:.75rem;margin-top:25px;}
+    [data-testid="stSidebar"] [data-testid="stButton"] button p {color:inherit!important;}
+    [data-testid="stSidebar"] [data-testid="stCaptionContainer"] p {color:#bdced5!important;}
+    [data-testid="stSidebar"] label p {color:#e5eff1!important;}
+    .st-key-dashboard_upload_action button p, .st-key-dashboard_search_action button p {color:#fff!important;}
     @media(max-width:760px) {.block-container {padding-top:3.75rem;} .workspace-hero {padding:22px;} .st-key-assistant_launcher {right:16px;bottom:16px;} }
     </style>""",
     unsafe_allow_html=True,
@@ -458,7 +462,7 @@ def upload_documents(kb):
     st.header("Upload documents")
     st.write(
         "Upload past proposals and project reference documents in PDF, Word (.docx), or text format. "
-        "Originals and searchable text are saved locally for future access."
+        "Originals use the configured file storage; searchable records are saved in the app’s SQLite database."
     )
     st.caption(
         "For a new project, use Search Knowledge Base to find related past work by keyword, "
@@ -784,7 +788,7 @@ def document_library(kb):
     st.subheader("Remove files")
     st.caption("Remove an outdated proposal or a duplicate reference from the library. Review the filenames before confirming.")
     with st.expander("Remove the selected document", expanded=True):
-        st.warning("Deletion removes this record, its searchable contents, and the locally saved original file.")
+        st.warning("Deletion removes this record, its searchable contents, and the saved original file.")
         confirmed = st.checkbox(
             f"I confirm deletion of document #{document_id} and its original file.",
             key=f"confirm_delete_{document_id}",
@@ -995,12 +999,27 @@ def main():
                       type="primary" if label == page else "secondary",
                       on_click=request_navigation, args=(label,))
         st.divider()
-        st.markdown('<span class="status-pill">● Local document storage</span>', unsafe_allow_html=True)
+        st.caption(f"Original files: {kb.original_storage} · Records/search: SQLite")
         st.caption("UNIVERSITY PROTOTYPE")
         st.caption("Public and fictional documents only. Industry workspaces keep project references separate.")
         with st.expander("Storage and backups"):
             st.text(str(kb.data_dir))
-            st.caption("Back up the entire data folder while the app is stopped.")
+            st.caption("SQLite records and search remain in this folder, even if originals use cloud storage.")
+            if os.environ.get("RENDER"):
+                st.warning("On Render, this folder must be on an attached persistent disk. Default/free service files can disappear on restart or redeploy.")
+            st.caption("Download backups to your own computer. A ZIP left on this server is not a durable backup. Create a new snapshot after changing the library.")
+            if st.button("Prepare downloadable backup", key="prepare_backup"):
+                try:
+                    from kb.backups import create_backup
+                    with st.spinner("Preparing database and original files..."):
+                        st.session_state["backup_bytes"] = create_backup(kb)
+                        st.session_state["backup_name"] = "agilitech-backup-" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".zip"
+                except KBError as error:
+                    st.session_state.pop("backup_bytes", None)
+                    st.error(str(error))
+            if st.session_state.get("backup_bytes"):
+                st.download_button("Download backup ZIP", st.session_state["backup_bytes"],
+                                   file_name=st.session_state["backup_name"], mime="application/zip", key="download_backup")
     if page != "Dashboard":
         st.markdown('<div class="eyebrow">Engineering knowledge · connected to its source</div>', unsafe_allow_html=True)
     st.title("Agilitech Proposal Knowledge Base")
