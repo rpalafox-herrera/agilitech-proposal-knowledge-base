@@ -56,6 +56,30 @@ def metadata_values(metadata, default_title):
     return result
 
 
+def storage_failure(exc):
+    """Classify remote failures without displaying messages that may contain secrets."""
+    status = getattr(exc, "status", None) or getattr(getattr(exc, "response", None), "status_code", None)
+    status = str(status) if str(status).isdigit() else "unknown"
+    details = (str(getattr(exc, "code", "")) + " " + str(getattr(exc, "message", ""))).lower()
+    if "bucket" in details and ("not found" in details or "notfound" in details or "not_found" in details):
+        advice = "Bucket not found or not accessible. Verify SUPABASE_BUCKET exists in the project selected by SUPABASE_URL."
+    elif status == "401" or any(word in details for word in ("jwt", "invalid api key", "invalidapikey", "invalidsignature")):
+        advice = "Authentication failed. Verify the URL and server secret key come from the same Supabase project. Never paste the key into chat."
+    elif status == "403" or any(word in details for word in ("row-level", "row level", "accessdenied", "access denied")):
+        advice = "Storage access was denied. Check that Render uses a server secret/service-role key with access to this private bucket, not an anon/publishable key."
+    elif status == "413" or "size" in details:
+        advice = "The bucket rejected the file size. Check its upload-size limit."
+    elif status == "415" or any(word in details for word in ("mime", "content type", "content-type")):
+        advice = "The bucket rejected the file type. Allow the supported PDF, DOCX and plain-text MIME types in its file restrictions."
+    elif status == "404":
+        advice = "Storage endpoint or object was not found. Verify the project URL and bucket."
+    elif status == "unknown":
+        advice = "Storage connection or client operation failed. Check that the Supabase project is active and reachable and the deployed requirements are current."
+    else:
+        advice = "Supabase rejected the storage operation. Check Storage logs in the Supabase dashboard for the failed request."
+    return KBError(f"Supabase storage failed (HTTP {status}). {advice}")
+
+
 class KnowledgeBase:
     def __init__(self, data_dir=None):
         self.data_dir = Path(data_dir or os.environ.get("AGILITECH_DATA_DIR") or PROJECT_ROOT / "data").resolve()
@@ -113,6 +137,16 @@ class KnowledgeBase:
         except Exception as exc:
             raise KBError("Firebase Storage could not be initialized. Check the Render Firebase credential and bucket name.") from exc
 
+    def check_storage(self):
+        """Read bucket metadata only; never list or download proposal contents."""
+        if self.supabase is None:
+            return f"Original files use {self.original_storage}; SQLite records remain at {self.data_dir}."
+        try:
+            self.supabase.storage.get_bucket(self.supabase_bucket)
+        except Exception as exc:
+            raise storage_failure(exc) from exc
+        return "Supabase bucket metadata is accessible. A synthetic upload is still required to verify write permission. SQLite persistence is separate."
+
     @contextmanager
     def connect(self):
         db = sqlite3.connect(self.db_path, timeout=15)
@@ -141,13 +175,20 @@ class KnowledgeBase:
         extracted = extract(filename, data)
         location = "uploads/" + uuid4().hex + Path(filename).suffix.lower()
         target = self._file(location) if self.original_storage == "Local" else None
+        remote_saved = False
         try:
             if self.supabase is not None:
-                self.supabase.storage.from_(self.supabase_bucket).upload(
-                    location, data, {"content-type": "application/octet-stream", "upsert": "false"})
+                mime = {".pdf": "application/pdf", ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".txt": "text/plain"}[Path(filename).suffix.lower()]
+                try:
+                    self.supabase.storage.from_(self.supabase_bucket).upload(
+                        location, data, {"content-type": mime, "upsert": "false"})
+                    remote_saved = True
+                except Exception as exc:
+                    raise storage_failure(exc) from exc
             elif self._firebase:
                 blob = self.firebase_bucket.blob(location)
                 blob.upload_from_string(data, content_type=None)
+                remote_saved = True
             with self.connect() as db:
                 # Serialize database/file mutation and recheck duplicates after extraction.
                 db.execute("BEGIN IMMEDIATE")
@@ -167,18 +208,20 @@ class KnowledgeBase:
         except Exception as exc:
             if target is not None:
                 target.unlink(missing_ok=True)
-            if self.supabase is not None:
+            if self.supabase is not None and remote_saved:
                 try:
                     self.supabase.storage.from_(self.supabase_bucket).remove([location])
                 except Exception:
                     pass
-            elif self._firebase:
+            elif self._firebase and remote_saved:
                 try:
                     self.firebase_bucket.blob(location).delete()
                 except Exception:
                     pass
             if isinstance(exc, KBError):
                 raise
+            if isinstance(exc, sqlite3.Error):
+                raise KBError("The local SQLite record or search index could not be saved. Check the database schema, write permissions and free disk space. Cloud file storage does not replace this database.") from exc
             raise KBError("Upload could not be saved. Check available disk space and folder permissions.") from exc
 
     def get_document(self, document_id):

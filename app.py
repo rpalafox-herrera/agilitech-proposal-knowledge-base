@@ -1004,6 +1004,11 @@ def main():
         st.caption("Public and fictional documents only. Industry workspaces keep project references separate.")
         with st.expander("Storage and backups"):
             st.text(str(kb.data_dir))
+            if st.button("Check storage connection", key="check_storage"):
+                try:
+                    st.success(kb.check_storage())
+                except KBError as error:
+                    st.error(str(error))
             st.caption("SQLite records and search remain in this folder, even if originals use cloud storage.")
             if os.environ.get("RENDER"):
                 st.warning("On Render, this folder must be on an attached persistent disk. Default/free service files can disappear on restart or redeploy.")
