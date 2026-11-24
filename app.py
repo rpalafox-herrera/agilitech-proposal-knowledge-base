@@ -548,23 +548,19 @@ def search_documents(kb):
 
 def project_idea_assistant(kb):
     """Turn a natural-language idea into source-grounded document recommendations."""
-    from kb.assistant import Assistant
     from kb.project_briefs import direction_draft, extract_project_briefs
     from kb.project_ideas import ProjectIdeaMatcher
 
     scope = selected_industry()
     st.header("Project Idea Assistant")
     st.write(
-        "Describe a possible project or attach the project files you were given. The assistant drafts "
-        "a usable project direction, expands related engineering concepts, and pulls useful past "
-        "files—no exact filename or complete summary required."
+        "Describe a possible project or attach the project files you were given. The assistant pulls "
+        "useful past files—no exact filename or complete summary required."
     )
     st.info(
         f"Searching: {scope or 'all industry workspaces'}. Recommendations are references, not a finished proposal. "
         "Verify every detail in the original document."
     )
-    helper = Assistant(kb)
-    status = helper.status()
     scope_key = scope or "all"
     result_key = f"project_idea_result_{scope_key}"
     draft_key = f"project_direction_draft_{scope_key}"
@@ -585,44 +581,24 @@ def project_idea_assistant(kb):
             accept_multiple_files=True, key=f"project_idea_files_{scope_key}",
             help="Up to five files, 20 MB each. They are analyzed for this session and are not added to the proposal library.",
         )
-        use_model = st.checkbox(
-            "Use the local AI to summarize the direction and matching sources",
-            value=bool(status["available"]), disabled=not status["available"],
-            key=f"project_idea_use_ai_{scope_key}",
-        )
-        if status["available"]:
-            st.caption(f"Local AI ready · {status['model']}. Proposal text stays on this computer.")
-        else:
-            st.caption("Local AI is not connected. Smart file matching still works without it.")
         st.caption("Temporary brief files are not saved to the library. This demo has no login; use only public, synthetic, or otherwise authorized files.")
         submitted = st.form_submit_button("Analyze project direction", type="primary")
     if submitted:
         try:
             if not idea.strip() and not brief_files:
                 raise KBError("Describe the project idea or attach at least one project brief file.")
-            with st.spinner("Reading the project material and drafting its purpose…"):
+            with st.spinner("Reading project details and finding reference files…"):
                 briefs = extract_project_briefs(
                     [(file.name, file.getvalue()) for file in brief_files]
                 )
-                ai_direction = helper.summarize_project_direction(idea, briefs) if use_model else None
-                summary = ai_direction["summary"] if ai_direction else direction_draft(idea, briefs)
+                summary = direction_draft(idea, briefs)
                 st.session_state[draft_key] = {
-                    "summary": summary, "briefs": briefs, "use_model": use_model,
-                    "mode": "local_model" if ai_direction else "document_analysis",
+                    "summary": summary, "briefs": briefs,
                 }
                 context = "\n\n".join(brief["text"] for brief in briefs)
                 result = ProjectIdeaMatcher(kb).analyze(
                     summary, industry=scope, limit=8, context_text=context,
                 )
-                result["ai_brief"] = None
-                if use_model and status["available"] and result["recommendations"]:
-                    question = (
-                        "Project direction: " + summary[:1400] +
-                        "\n\nUsing stored proposal evidence, explain which prior scope elements could help and which assumptions should be checked."
-                    )
-                    result["ai_brief"] = helper.answer(
-                        question, use_model=True, industry=scope, allow_navigation=False,
-                    )
                 st.session_state[result_key] = result
                 st.rerun()
         except KBError as error:
@@ -631,11 +607,7 @@ def project_idea_assistant(kb):
     if not draft:
         st.caption("Tip: attach a scope document, request for proposal, meeting notes, or a public/synthetic project brief.")
         return
-    st.caption(
-        ("Local AI draft from the supplied material." if draft["mode"] == "local_model" else
-         "Local document-analysis draft. Connect the optional local AI for a generated summary.")
-        + " References are matched automatically from this direction and any attached brief files."
-    )
+    st.caption("References are matched automatically from your project details and any attached brief files.")
     for brief in draft["briefs"]:
         st.caption(f"Reviewed temporarily: {brief['name']}")
         if brief.get("warning"):
@@ -653,11 +625,6 @@ def project_idea_assistant(kb):
     recommendations = result["recommendations"]
     if result.get("detected_industries") and not scope:
         st.caption("Likely workspaces: " + " · ".join(result["detected_industries"]))
-    brief = result.get("ai_brief")
-    if brief:
-        st.subheader("Source-grounded AI project brief")
-        st.write(brief["answer"])
-        st.caption("Generated by the optional local model. Confirm its statements against the recommended originals below.")
     if not recommendations:
         st.warning(
             "No related proposal content was found in this workspace. Try adding equipment, discipline, or outcome terms, "
