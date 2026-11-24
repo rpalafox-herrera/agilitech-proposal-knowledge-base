@@ -555,9 +555,8 @@ def project_idea_assistant(kb):
     scope = selected_industry()
     st.header("Project Idea Assistant")
     st.write(
-        "Describe a possible project or attach the project files you were given. The assistant drafts "
-        "a usable project direction, expands related engineering concepts, and pulls useful past "
-        "files—no exact filename or complete summary required."
+        "Describe a possible project or attach the project files you were given. The assistant pulls "
+        "useful past files—no exact filename or complete summary required."
     )
     st.info(
         f"Searching: {scope or 'all industry workspaces'}. Recommendations are references, not a finished proposal. "
